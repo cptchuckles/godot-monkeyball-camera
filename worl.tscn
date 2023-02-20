@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://debug_grid.png" type="Texture" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Camera.gd" type="Script" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_world_triplanar = true
+albedo_texture = ExtResource( 1 )
+uv1_triplanar = true
+
+[sub_resource type="SphereShape" id=2]
+
+[sub_resource type="SphereMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_texture = ExtResource( 2 )
+uv1_scale = Vector3( 4, 2, 1 )
+
+[sub_resource type="Curve3D" id=5]
+_data = {
+"points": PoolVector3Array( 1.01543, 0, 0.00832319, -1.01543, 0, -0.00832319, 0.0373998, -7.62939e-06, -1.89573, 0.00832319, 0, -1.03207, -0.00832319, 0, 1.03207, -1.96849, -7.62939e-06, 0.110156, -1.01543, 0, -0.00832295, 1.01543, 0, 0.00832295, 0.0373998, -7.62939e-06, 2.11604, 0, 0, 1.00711, 0, 0, -1.00711, 2.02664, -7.62939e-06, 0.0935093, 0.973813, 0, -0.00832319, -0.973813, 0, 0.00832319, 0.0373998, -7.62939e-06, -1.89573 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[node name="worl" type="Spatial"]
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+material_override = SubResource( 1 )
+use_collision = true
+
+[node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 0.932922, -0.360078, 0, 0.360078, 0.932922, 0, 0, 0, 1, 0, 11.1854, 0 )
+width = 22.6323
+height = 0.400863
+depth = 12.6127
+
+[node name="CSGCarverBox" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12698, 9.35205, 0 )
+operation = 2
+width = 5.27235
+height = 3.38891
+depth = 5.47354
+
+[node name="CSGBox2" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.53746, 2.5467, 0 )
+width = 0.546275
+height = 10.0181
+depth = 10.1207
+
+[node name="CSGBox3" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 0.999239, 0.0389982, 0, -0.0389398, 0.997744, -0.0546888, -0.00213276, 0.0546472, 0.998503, 0, 0, 0 )
+width = 22.5485
+height = 0.481843
+depth = 10.7864
+
+[node name="MonkeyBall" type="RigidBody" parent="."]
+unique_name_in_owner = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.03115, 15.163, 1.00521 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="MonkeyBall"]
+shape = SubResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="MonkeyBall"]
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="RemoteTransform" type="RemoteTransform" parent="MonkeyBall"]
+remote_path = NodePath("../../PathHolder")
+update_rotation = false
+
+[node name="PathHolder" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.03115, 15.163, 1.00521 )
+
+[node name="CameraTrack" type="Path" parent="PathHolder"]
+unique_name_in_owner = true
+transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 2, -0.0332928, 2, -0.0749085 )
+curve = SubResource( 5 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.29963, 17.1043, 5.16465 )
+script = ExtResource( 3 )
